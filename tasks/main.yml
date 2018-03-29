@@ -31,7 +31,7 @@
   register: gid_stat
 - name: file stat dump
   debug:
-    var: git_stat
+    var: gid_stat
 - name: Get Maxmind databases
   get_url:
     url: "{{ item }}"
@@ -52,10 +52,10 @@
   register: gid_stat
 - name: file stat dump
   debug:
-    var: git_stat
+    var: gid_stat
 
 - name: extract db
-  command: "gunzip {{ maxmind_rootdir }}/download/{{ item }}.gz creates={{ maxmind_rootdir }}/{{ item }}"
+  command: "gunzip -c {{ maxmind_rootdir }}/download/{{ item }}.gz > {{ maxmind_rootdir }}/{{ item }} creates={{ maxmind_rootdir }}/{{ item }}"
 ## unarchive only supports archives (tar/tgz/zip), not compressed data files
 #  unarchive:
 #    src: "{{ maxmind_rootdir }}/download/{{ item }}.gz"
@@ -70,6 +70,13 @@
     - GeoIPASNumv6.dat
     - GeoLite2-City.mmdb
     - GeoLite2-Country.mmdb
+- name: Collect info on one of the files to be downloaded
+  stat:
+    path: "{{ maxmind_rootdir }}/download/GeoIP.dat.gz"
+  register: gid_stat
+- name: file stat dump
+  debug:
+    var: gid_stat
 
 - name: symlink GeoIP dir to /usr/share/GeoIP
   file: "src={{ maxmind_rootdir }} dest=/usr/share/GeoIP state=link"
