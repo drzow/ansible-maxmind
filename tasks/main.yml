@@ -55,7 +55,9 @@
     var: gid_stat
 
 - name: extract db
-  command: "gunzip -c {{ maxmind_rootdir }}/download/{{ item }}.gz > {{ maxmind_rootdir }}/{{ item }} creates={{ maxmind_rootdir }}/{{ item }}"
+  shell: "gunzip -c {{ maxmind_rootdir }}/download/{{ item }}.gz > {{ maxmind_rootdir }}/{{ item }}"
+  args:
+    creates: "{{ maxmind_rootdir }}/{{ item }}"
 ## unarchive only supports archives (tar/tgz/zip), not compressed data files
 #  unarchive:
 #    src: "{{ maxmind_rootdir }}/download/{{ item }}.gz"
