@@ -25,13 +25,6 @@
   file: "path={{ maxmind_rootdir }}/download mode=0755 owner=root state=directory"
 
 ## Downloads to dedicated directory to allow get_url to remain idempotent
-- name: Collect info on one of the files to be downloaded
-  stat:
-    path: "{{ maxmind_rootdir }}/download/GeoIP.dat.gz"
-  register: gid_stat
-- name: file stat dump
-  debug:
-    var: gid_stat
 - name: Get Maxmind databases
   get_url:
     url: "{{ item }}"
@@ -46,13 +39,6 @@
     - http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNumv6.dat.gz
     - http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz
     - http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz
-- name: Collect info on one of the files to be downloaded
-  stat:
-    path: "{{ maxmind_rootdir }}/download/GeoIP.dat.gz"
-  register: gid_stat
-- name: file stat dump
-  debug:
-    var: gid_stat
 
 - name: extract db
   shell: "gunzip -c {{ maxmind_rootdir }}/download/{{ item }}.gz > {{ maxmind_rootdir }}/{{ item }}"
@@ -72,13 +58,6 @@
     - GeoIPASNumv6.dat
     - GeoLite2-City.mmdb
     - GeoLite2-Country.mmdb
-- name: Collect info on one of the files to be downloaded
-  stat:
-    path: "{{ maxmind_rootdir }}/download/GeoIP.dat.gz"
-  register: gid_stat
-- name: file stat dump
-  debug:
-    var: gid_stat
 
 - name: symlink GeoIP dir to /usr/share/GeoIP
   file: "src={{ maxmind_rootdir }} dest=/usr/share/GeoIP state=link"
